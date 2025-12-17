@@ -5,6 +5,9 @@ Welcome to my repo for customisations for Home Assistant. Feel free to pick and 
 The high-level folders are as follows:
 
 [automations/](automations/)
+
 [dashboards/](dashboards/)
+
 [sensors/](sensors/)
+
 [templates/](templates/)

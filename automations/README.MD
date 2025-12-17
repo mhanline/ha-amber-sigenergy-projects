@@ -4,8 +4,9 @@
 
 You will need to disable the automatic polling of the Amber integration, so you can implement the custom timers of the automation. This automation will hit the Amber API at 14s past every 5 minute period, and keep trying every few seconds until it receives live result. It will then wait until the next 5-minute period.
 
-
 This greatly improves the time it takes to get a live result, and minimises unnecessary calls to the Amber API.
+
+Follow the instructions to use automation instead of the default polling [here](https://www.home-assistant.io/common-tasks/general/#why-use-an-automation-instead-of-changing-the-integrations-polling-configurationhttps:/).
 
 ## amber_curtailment_trigger.yaml
 

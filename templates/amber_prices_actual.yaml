@@ -1,0 +1,62 @@
+# Copyright 2025 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## Template sensors to filter estimates from the feed-in and 
+## general prices.
+#################################################################
+
+        ##########################################################
+        ## Feed-in price template sensor
+        ##########################################################
+
+  - triggers:
+      - trigger: state
+        entity_id: sensor.your_sensor_name_feed_in_price
+        attribute: estimate
+      - trigger: state
+        entity_id: sensor.your_sensor_name_feed_in_price
+        attribute: start_time
+    conditions:
+      - condition: state
+        entity_id: sensor.your_sensor_name_feed_in_price
+        state: false
+        attribute: estimate
+    sensor:
+      state: "{{ (states('sensor.your_sensor_name_feed_in_price') | float) }}"
+      unique_id: amber_feed_in_price_actual
+      unit_of_measurement: "$/kWh"
+      name: "Amber Feed-in Price No Estimates"
+      attributes:
+        per_kwh: "{{ (state_attr('sensor.your_sensor_name_feed_in_price', 'per_kwh') | float) }}"
+        spike_status: "{{ state_attr('sensor.your_sensor_name_feed_in_price', 'spike_status') }}"
+        start_time: "{{ state_attr('sensor.your_sensor_name_feed_in_price', 'start_time') }}"
+        end_time: "{{ state_attr('sensor.your_sensor_name_feed_in_price', 'end_time') }}"
+        spot_per_kwh: "{{ state_attr('sensor.your_sensor_name_feed_in_price', 'spot_per_kwh') }}"
+
+        ##########################################################
+        ## General price template sensor
+        ##########################################################
+
+  - triggers:
+      - trigger: state
+        entity_id: sensor.your_sensor_name_general_price
+        attribute: estimate
+      - trigger: state
+        entity_id: sensor.your_sensor_name_general_price
+        attribute: start_time
+    conditions:
+      - condition: state
+        entity_id: sensor.your_sensor_name_general_price
+        state: false
+        attribute: estimate
+    sensor:
+      state: "{{ (states('sensor.your_sensor_name_general_price') | float ) }}"
+      unit_of_measurement: "$/kWh"
+      unique_id: amber_general_price_actual
+      name: "Amber General Price No Estimates"
+      attributes:
+        per_kwh: "{{ (state_attr('sensor.your_sensor_name_general_price', 'per_kwh') | float) }}"
+        spike_status: "{{ state_attr('sensor.your_sensor_name_general_price', 'spike_status') }}"
+        start_time: "{{ state_attr('sensor.your_sensor_name_general_price', 'start_time') }}"
+        end_time: "{{ state_attr('sensor.your_sensor_name_general_price', 'end_time') }}"
+        spot_per_kwh: "{{ state_attr('sensor.your_sensor_name_general_price', 'spot_per_kwh') }}"

@@ -1,0 +1,17 @@
+# Copyright 2025 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## Binary Curtailment State for grid export limit
+## On (limit >0): Plant can export to grid
+## Off (limit 0): Plant cannot export to grid
+#################################################################
+
+  - triggers:
+    - trigger: state
+      entity_id: number.sigen_plant_grid_export_limitation
+    binary_sensor:
+      - name: "Sigenergy Grid Export Curtailment"
+        unique_id: sigenergy_grid_export_curtail
+        availability: "{{ is_number(states('number.sigen_plant_grid_export_limitation')) }}"
+        state: >
+          {{ not (states('number.sigen_plant_grid_export_limitation')|float > 0) }}

@@ -1,0 +1,37 @@
+# Copyright 2025 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## 
+## Displays Amber feed-in and general prices.
+## Displays a binary sensor for Amber curtailment on the same
+## timeline.
+## 
+#################################################################
+
+type: custom:history-explorer-card
+defaultTimeRange: "8"
+lineGraphHeight: 350
+lineMode: stepped
+lineWidth: 1
+showUnavailable: true
+header: Amber Electric Feed-in and General Prices
+graphs:
+  - type: timeline
+    options:
+      showSamples: false
+    entities:
+      - entity: binary_sensor.sigenergy_grid_export_curtailment
+  - type: line
+    options:
+      showSamples: false
+    entities:
+      - entity: sensor.amber_feed_in_price_no_estimates
+      - entity: sensor.amber_general_price_no_estimates
+  - type: line
+    options:
+      showSamples: false
+    entities:
+      - entity: sensor.18tobruk_feed_in_price
+      - entity: sensor.18tobruk_general_price
+grid_options:
+  columns: full

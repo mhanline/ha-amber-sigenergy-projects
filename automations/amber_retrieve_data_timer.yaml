@@ -1,0 +1,97 @@
+# Copyright 2025 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## 
+## Calls the Amber API shortly after every 5 minute period to
+## get the general and feed-in price for the current period.
+## Stops once estimate = false is received until the next period.
+## Timers match the defaults of the amber2mqtt service, but can
+## be changed as required by modifying time_pattern.
+##
+#################################################################
+
+- id: 'amber_retrieve_data_timer'
+  alias: Amber Retrieve 5-minute data Custom Timer
+  description: ''
+  triggers:
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '14'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '16'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '18'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '19'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '21'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '23'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '25'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '27'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '30'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '32'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '35'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '40'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '45'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '50'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '55'
+  - trigger: time_pattern
+    minutes: /5
+    seconds: '59'
+  conditions:
+  - condition: or
+    conditions:
+    - condition: trigger
+      id: '0'
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: sensor.your_sensor_name_feed_in_price
+        state:
+        - false
+        attribute: estimate
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: sensor.your_sensor_name_general_price
+        state:
+        - false
+        attribute: estimate
+  actions:
+  - action: homeassistant.update_entity
+    metadata: {}
+    data:
+      entity_id:
+      - sensor.your_sensor_name_general_price
+      - sensor.your_sensor_name_feed_in_price
+      - binary_sensor.your_sensor_name_demand_window
+      - sensor.your_sensor_name_feed_in_forecast
+      - sensor.your_sensor_name_general_forecast
+      - binary_sensor.your_sensor_name_price_spike
+  mode: single
+  trace:
+    stored_traces: 100

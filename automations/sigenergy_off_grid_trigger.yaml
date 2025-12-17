@@ -1,0 +1,30 @@
+# Copyright 2025 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## 
+## Notifies you if the Sigenergy system goes off-grid
+## Ignores unknown events.
+## 
+#################################################################
+
+- id: 'sigenergy_trigger_off_grid'
+  alias: Sigenergy Off-Grid Notification
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.sigen_plant_grid_connection_status
+    from:
+    - On Grid
+    - Off Grid
+    to:
+    - On Grid
+    - Off Grid
+  conditions: []
+  actions:
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: System went from {{ trigger.from_state.state }} to {{ trigger.to_state.state
+        }}
+  mode: single

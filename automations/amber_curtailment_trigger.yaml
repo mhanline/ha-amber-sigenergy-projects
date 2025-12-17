@@ -1,0 +1,46 @@
+# Copyright 2025 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## Sets the grid export limit on Sigenergy plant to 0kw during 
+## zero or negative feed-in prices, and 20kw when >0.
+## Amber SmartShift also use this setting to set curtailment.
+## This replicates the Amber Smartshift curtailment feature.
+## Use the amber_feed_in_price_no_estimates sensor but can use
+## the sensor.your_sensor_name_feed_in_price
+#################################################################
+
+- id: 'amber_curtail_on_off_sigenergy'
+  alias: Amber Feed-In Curtailment Trigger
+  description: 'Triggers curtailment on the Sigenergy BESS if feed-in rate from Amber reaches zero or lower'
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.amber_feed_in_price_no_estimates
+    attribute: per_kwh
+  actions:
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: sensor.amber_feed_in_price_no_estimates
+        below: 0.01
+        attribute: per_kwh
+      sequence:
+      - action: number.set_value
+        metadata: {}
+        data:
+          value: '0'
+        target:
+          entity_id: number.sigen_plant_grid_export_limitation
+    - conditions:
+      - condition: numeric_state
+        entity_id: sensor.amber_feed_in_price_no_estimates
+        above: 0
+        attribute: per_kwh
+      sequence:
+      - action: number.set_value
+        metadata: {}
+        data:
+          value: '20'
+        target:
+          entity_id: number.sigen_plant_grid_export_limitation
+  mode: single

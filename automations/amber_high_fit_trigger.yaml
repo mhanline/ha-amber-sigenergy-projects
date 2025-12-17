@@ -1,0 +1,24 @@
+# Copyright 2025 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## 
+## Notify when high feed-in occurs in Amber
+## 
+#################################################################
+
+- id: 'amber_high_fit_trigger'
+  alias: Amber High Feed-in Trigger
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.amber_feed_in_price_no_estimates
+    attribute: per_kwh
+    above: 0.5
+  conditions: []
+  actions:
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: High FIT ${{ trigger.to_state.state|float(0) }}
+  mode: single

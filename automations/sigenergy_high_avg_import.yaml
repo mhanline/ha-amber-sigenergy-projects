@@ -1,0 +1,30 @@
+# Copyright 2025 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## 
+## Notify if grid import is happening during a set period.
+## Currently date/time is set for Ausgrid (Australian energy
+## distributor) residential demand window.
+## 
+#################################################################
+
+- id: 'sigenergy_importing_from_grid_average'
+  alias: Grid Import Notification High
+  description: 'Sends a notification if the Sigenergy system is importing from the grid during peak times (such as during demand window)'
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.grid_import_average_sensor
+    above: 0.8
+  conditions:
+  - condition: time
+    after: '15:00:00'
+    before: '21:00:00'
+  - condition: template
+    value_template: '{{ now().month in [1,2,3,6,7,8,11,12] }}'
+  actions:
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Grid importing during demand period ${{ trigger.to_state.state|float(0) }}kwh
+  mode: single

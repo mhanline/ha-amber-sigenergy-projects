@@ -1,0 +1,15 @@
+# Copyright 2025 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## Statistics sensor that calculates a short average grid import 
+## Used in automations to notify when importing during high
+## prices or time windows of high demand.
+#################################################################
+
+  - platform: statistics
+    unique_id: "grid_import_avg_sensor"
+    name: "Grid Import Average Sensor"
+    entity_id: sensor.sigen_plant_grid_import_power
+    state_characteristic: average_linear
+    max_age:
+      minutes: 2

@@ -1,0 +1,9 @@
+# Copyright 2026 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## Calculates what status the Ausgrid export tariff is on wth EA029
+#################################################################
+- sensor:
+    - name: "Electricity Export Tariff"
+      unique_id: electricity_export_tariff
+      state: "{{ 'charge' if today_at('10:00') < now() < today_at('15:00') else ('reward' if today_at('16:00') < now() < today_at('21:00') else 'none') }}"

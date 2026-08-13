@@ -1,0 +1,9 @@
+# Copyright 2026 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## Calculates what status the Ausgrid demand tariff is (EA116)
+#################################################################
+- sensor:
+    - name: "Electricity Demand Tariff"
+      unique_id: electricity_demand_tariff
+      state: "{{ 'active' if (today_at('15:00') < now() < today_at('21:00') and now().month in [1,2,3,6,7,8,11,12]) else 'inactive' }}"

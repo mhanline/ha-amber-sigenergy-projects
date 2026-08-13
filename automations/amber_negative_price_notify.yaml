@@ -1,0 +1,26 @@
+# Copyright 2026 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## 
+## Notify when negative price occurs. Exempts when demand window
+## is active.
+## 
+#################################################################
+alias: Amber Negative Price Notify
+description: ''
+triggers:
+  - trigger: numeric_state
+    entity_id:
+      - sensor.amber_express_your_sensor_general_price
+    below: 0
+conditions:
+  - condition: state
+    entity_id: binary_sensor.amber_express_your_sensor_demand_window
+    state:
+      - 'off'
+actions:
+  - action: notify.send_message
+    metadata: {}
+    data:
+      message: Negative price
+mode: single

@@ -12,7 +12,7 @@
   triggers:
   - trigger: numeric_state
     entity_id:
-    - sensor.amber_feed_in_price_no_estimates
+    - sensor.amber_express_your_sensor_feed_in_price
     attribute: per_kwh
     above: 0.5
   conditions: []

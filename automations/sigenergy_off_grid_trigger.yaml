@@ -3,28 +3,30 @@
 #################################################################
 ## 
 ## Notifies you if the Sigenergy system goes off-grid
-## Ignores unknown events.
+## Ignores unknown/unavailable events.
 ## 
 #################################################################
 
-- id: 'sigenergy_trigger_off_grid'
-  alias: Sigenergy Off-Grid Notification
-  description: ''
-  triggers:
+alias: Sigenergy Off-Grid Notification
+description: >-
+  Notifies if Sigenergy system goes off-grid. Set to send an in-app
+  notification
+triggers:
   - trigger: state
     entity_id:
-    - sensor.sigen_plant_grid_connection_status
-    from:
-    - On Grid
-    - Off Grid
-    to:
-    - On Grid
-    - Off Grid
-  conditions: []
-  actions:
+      - sensor.sigen_plant_grid_connection_status
+    not_from:
+      - unknown
+      - unavailable
+    not_to:
+      - unknown
+      - unavailable
+conditions: []
+actions:
   - action: notify.notify
     metadata: {}
     data:
-      message: System went from {{ trigger.from_state.state }} to {{ trigger.to_state.state
-        }}
-  mode: single
+      message: >-
+        System went from {{ trigger.from_state.state }} to {{
+        trigger.to_state.state }}
+mode: single

@@ -1,0 +1,57 @@
+# Copyright 2026 Michael Hanline
+# SPDX-License-Identifier: Apache-2.0
+#################################################################
+## 
+## Write Amber Geneal and Feed-in prices to CSV every update interval
+## 
+#################################################################
+
+alias: Write CSV Amber Prices
+description: 'Writes the general and feedin prices to a CSV whenever the price is updated. Ensure the estimate attribute aligns with your chosen sensor.'
+triggers:
+  - trigger: state
+    entity_id: sensor.amber_express_your_sensor_general_price
+    id: general
+  - trigger: state
+    entity_id: sensor.amber_express_your_sensor_feed_in_price
+    id: feedin
+conditions:
+  - condition: template
+    value_template: '{{ trigger.to_state.attributes.estimate == false }}'
+    enabled: true
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - general
+        sequence:
+          - action: notify.send_message
+            target:
+              entity_id: notify.file_general_csv
+            data:
+              message: >-
+                {{ now().strftime('%Y-%m-%d %H:%M:%S') }},{{
+                states('sensor.amber_express_your_sensor_general_price') }},{{
+                state_attr('sensor.amber_express_your_sensor_general_price',
+                'start_time') }},{{
+                state_attr('sensor.amber_express_your_sensor_general_price',
+                'end_time') }},{{ trigger.to_state.attributes.estimate }}
+      - conditions:
+          - condition: trigger
+            id:
+              - feedin
+        sequence:
+          - action: notify.send_message
+            target:
+              entity_id: notify.file_feedin_csv
+            data:
+              message: >-
+                {{ now().strftime('%Y-%m-%d %H:%M:%S') }},{{
+                states('sensor.amber_express_your_sensor_feed_in_price') }},{{
+                state_attr('sensor.amber_express_your_sensor_feed_in_price',
+                'start_time') }},{{
+                state_attr('sensor.amber_express_your_sensor_feed_in_price',
+                'end_time') }},{{ trigger.to_state.attributes.estimate }}
+mode: parallel
+max: 4
